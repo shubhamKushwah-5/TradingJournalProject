@@ -1,6 +1,10 @@
 package com.shubham.journal_api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 
 @Entity //this tells jpa that this is a database table
@@ -11,20 +15,28 @@ public class Trade {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto increment
     private Long id;
 
+    @NotBlank(message = "symbol cannot be empty")
+    @Size(min = 2 , max = 20, message = "symbol must be between 2 and 20 characters")
     @Column(nullable = false)
     private String symbol;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Type cannot be empty")
+    @Pattern(regexp = "BUY|SELL", message = "Type must be either BUY or SELL")
+   // @Column(nullable = false)
     private String type ; //BUY OR SELL
 
+    @Positive(message = "Entry price must be positive")
     @Column(name = "entry_price")
     private double entryPrice;
 
+    @Positive(message = "Exit price must be positive")
     @Column(name = "exit_price")
     private double exitPrice;
 
+    @Positive(message = "Quantity must be positive")
     private int quantity;
 
+    @NotBlank(message = "Strategy cannot be empty")
     private String strategy;
 
 
