@@ -5,6 +5,7 @@ import com.shubham.journal_api.model.Trade;
 import com.shubham.journal_api.repository.TradeRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
 
 @RestController
 @RequestMapping("/api/trades") //base url for all endpoints
@@ -265,6 +272,51 @@ public class TradeController{
 
         return breakdown;
     }
+
+
+    //GET trades form specific date
+    @GetMapping("/date/{date}")
+    public List<Trade> getTradesByDate(@PathVariable String date){
+        //format is yyyy-mm--dd
+        LocalDate localDate = LocalDate.parse(date);
+        LocalDateTime startOfDay = localDate.atStartOfDay();
+        LocalDateTime endOfDay = localDate.plusDays(1).atStartOfDay();
+
+        return tradeRepository.findByTradeDateBetween(startOfDay, endOfDay);
+    }
+
+    //GET trades form date range
+    @GetMapping("/date-range")
+    public List<Trade> getTradesByDateRange(
+            @RequestParam String start,
+            @RequestParam String end) {
+        //format is yyyy-mm-dd
+        LocalDateTime startDate = LocalDate.parse(start).atStartOfDay();
+        LocalDateTime endDate = LocalDate.parse(end).plusDays(1).atStartOfDay();
+
+        return tradeRepository.findByTradeDateBetween(startDate,endDate);
+    }
+
+    //GET today's trades
+    @GetMapping("/today")
+    public List<Trade> getTodayTrades(){
+        return tradeRepository.findTodayTrades();
+    }
+
+    //GET this week's trades
+    @GetMapping("/this-week")
+    public List<Trade> getThisWeekTrades(){
+        LocalDateTime weekAgo = LocalDateTime.now().minusDays(7);
+        return tradeRepository.findByTradeDateAfter(weekAgo);
+    }
+
+    //GET this month's trades
+    @GetMapping("/this-month")
+    public List<Trade> getThisMonthTrades() {
+        LocalDateTime monthAgo = LocalDateTime.now().minusMonths(1);
+        return tradeRepository.findByTradeDateAfter(monthAgo);
+    }
+
 
 
 
