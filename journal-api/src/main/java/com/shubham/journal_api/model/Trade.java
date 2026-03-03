@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 @Table(name= "trades") //table name in mysql db
 public class Trade {
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Id //primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto increment
     private Long id;
@@ -99,6 +103,9 @@ public class Trade {
     public LocalDateTime getUpdateAt() { return updateAt;}
     public void setUpdateAt(LocalDateTime updateAt){this.updateAt = updateAt;}
 
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
 
 //    tradeDate = when trade actually happened
 //    createdAt = when record was created in DB
@@ -141,6 +148,8 @@ public class Trade {
         return (entryPrice - exitPrice) * quantity;
 
     }
+
+
 
 
 
