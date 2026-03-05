@@ -3,6 +3,7 @@ package com.shubham.journal_api.service;
 import com.shubham.journal_api.dto.AuthResponse;
 import com.shubham.journal_api.dto.LoginRequest;
 import com.shubham.journal_api.dto.RegisterRequest;
+import com.shubham.journal_api.exception.UserNotFoundException;
 import com.shubham.journal_api.model.User;
 import com.shubham.journal_api.repository.UserRepository;
 import com.shubham.journal_api.util.JwtUtil;
@@ -53,7 +54,7 @@ public class AuthService {
     public AuthResponse login(LoginRequest request){
         //find user by username
         User user= userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+                .orElseThrow(() -> new UserNotFoundException(request.getUsername()));
 
         //verify password
         //psswordEncoder.matches(plainPassword, hashedPassword)
