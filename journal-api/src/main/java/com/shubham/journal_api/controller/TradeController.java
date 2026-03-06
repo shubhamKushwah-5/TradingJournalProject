@@ -1,324 +1,178 @@
 package com.shubham.journal_api.controller;
 
-import com.shubham.journal_api.exception.TradeNotFoundException;
 import com.shubham.journal_api.model.Trade;
-import com.shubham.journal_api.repository.TradeRepository;
+import com.shubham.journal_api.service.TradeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-
-
 @RestController
-@RequestMapping("/api/trades") //base url for all endpoints
+@RequestMapping("/api/trades")
 public class TradeController{
 
-    @Autowired //spring will inject repository dependency
-    private TradeRepository tradeRepository;
+    @Autowired
+    private TradeService tradeService;
 
-    //temporary storage
-   // private List<Trade> trades = new ArrayList<>();
+    //                 BASIC CRUD CONTROLLERS
 
-    //Get all trades
+    // GET all trades for logged-in user
     @GetMapping
-    public List<Trade> getAllTrades(){
-        return tradeRepository.findAll();
+    public List<Trade> getAllTrades(Authentication authentication){
+        String username = authentication.getName();
+        return tradeService.getUserTrades(username);
     }
 
     // GET single trade by ID
     @GetMapping("/{id}")
-    public Trade getTradeById(@PathVariable Long id) {
-        return tradeRepository.findById(id).orElseThrow(() -> new TradeNotFoundException(id));
+    public Trade getTradeById(@PathVariable Long id, Authentication authentication) {
+        String username = authentication.getName();
+        return tradeService.getTradeById(id, username);
     }
 
-    //add new trade
+    // POST - add new trade
     @PostMapping
-    public ResponseEntity<Trade> addNewTrade(@Valid @RequestBody Trade trade){
-        Trade savedTrade = tradeRepository.save(trade);
-        return new ResponseEntity<>(savedTrade, HttpStatus.CREATED);  //201 status will be there
-
-
+    public ResponseEntity<Trade> addNewTrade(@Valid @RequestBody Trade trade, Authentication authentication){
+        String username = authentication.getName();
+        Trade savedTrade = tradeService.addTrade(trade, username);
+        return new ResponseEntity<>(savedTrade, HttpStatus.CREATED);
     }
 
-    //counting trades number
-//    @GetMapping("/count")
-//    public String getTradeCount(){
-//        return "Total trades: " + trade.size();
-//
-//    }
-//
-//    //trade pnl
-//    @GetMapping("/{index}/pnl")
-//    public String getTradePnL(@PathVariable int index){
-//        if(index >= 0 && index < trade.size()) {
-//            Trade trade = trade.get(index);
-//            double pnl = trade.calculatePnL();
-//            return String.format("P&L for %s: ₹%.2f %s",
-//                    trade.getSymbol(), pnl, pnl > 0 ? "✓" : "✗");
-//        }
-//        return "Trade not found" ;
-//    }
+    // PUT - update trade
+    @PutMapping("/{id}")
+    public Trade updateTrade(@PathVariable Long id,
+                             @Valid @RequestBody Trade tradeDetails,
+                             Authentication authentication){
+        String username = authentication.getName();
+        return tradeService.updateTrade(id, tradeDetails, username);
+    }
 
-    //total pnl
+    // DELETE trade
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTrade(@PathVariable Long id, Authentication authentication){
+        String username = authentication.getName();
+        tradeService.deleteTrade(id, username);
+        return ResponseEntity.ok("Trade deleted with id: " + id);
+    }
+
+    //            STATISTICS ENDPOINTS
+
+    // GET total P&L
     @GetMapping("/stats/total-pnl")
-    public double getTotalPnL() {
-        List<Trade> trades = tradeRepository.findAll();
-        double total = 0;
-        for (Trade trade : trades) {
-            total += trade.calculatePnL();
-        }
-        return total;
+    public double getTotalPnL(Authentication authentication) {
+        String username = authentication.getName();
+        return tradeService.getTotalPnL(username);
     }
 
-    //winrate
+    // GET win rate
     @GetMapping("/stats/winrate")
-    public String getWinRate(){
-        List<Trade> trades = tradeRepository.findAll();
-
-        if(trades.isEmpty()) return "No trades yet ";
-
-        int wins =0;
-        for(Trade trade : trades) {
-            if(trade.calculatePnL() > 0) wins ++;
-        }
-        double winRate = (wins * 100.0) / trades.size();
+    public String getWinRate(Authentication authentication){
+        String username = authentication.getName();
+        double winRate = tradeService.getWinRate(username);
         return String.format("Win rate: %.1f%%", winRate);
     }
 
-    //put - update trade
-    @PutMapping("/{id}")
-    public Trade updateTrade(@PathVariable Long id, @Valid @RequestBody Trade tradeDetails){
-        Trade trade = tradeRepository.findById(id).orElseThrow(() ->new TradeNotFoundException(id));
-
-            trade.setSymbol(tradeDetails.getSymbol());
-            trade.setType(tradeDetails.getType());
-            trade.setEntryPrice(tradeDetails.getEntryPrice());
-            trade.setExitPrice(tradeDetails.getExitPrice());
-            trade.setQuantity(tradeDetails.getQuantity());
-            trade.setStrategy(tradeDetails.getStrategy());
-
-            return tradeRepository.save(trade);
-
-    }
-
-    //Delete trade
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTrade(@PathVariable Long id){
-        if (!tradeRepository.existsById(id)){
-            throw new TradeNotFoundException(id);
-        }
-        tradeRepository.deleteById(id);
-        return ResponseEntity.ok("Trade deleted with id: " + id);
-
-    }
-
-    //get trades by strategy
-    @GetMapping("/strategy/{strategy}")
-    public List<Trade> getTradesByStrategy(@PathVariable String strategy) {
-        return tradeRepository.findByStrategy(strategy);
-    }
-
-    //GET best trade(highest pnl)
+    // GET best trade (highest P&L)
     @GetMapping("/stats/best-trade")
-    public ResponseEntity<Trade> getBestTrade(){
-        List<Trade> trades = tradeRepository.findAll();
-        if(trades.isEmpty()) {
+    public ResponseEntity<Trade> getBestTrade(Authentication authentication){
+        String username = authentication.getName();
+        Trade best = tradeService.getBestTrade(username);
+        if(best == null) {
             return ResponseEntity.noContent().build();
         }
-
-        Trade best = trades.stream()
-                .max((t1,t2) -> Double.compare(t1.calculatePnL(), t2.calculatePnL()))
-                .orElse(null);
-
         return ResponseEntity.ok(best);
     }
 
-    //GET worst trade(lowest pnl)
-    @GetMapping("stats/worst-trade")
-    public ResponseEntity<Trade> getWorstTrade(){
-        List<Trade> trades = tradeRepository.findAll();
-        if(trades.isEmpty()) {
+    // GET worst trade (lowest P&L)
+    @GetMapping("/stats/worst-trade")
+    public ResponseEntity<Trade> getWorstTrade(Authentication authentication){
+        String username = authentication.getName();
+        Trade worst = tradeService.getWorstTrade(username);
+        if(worst == null){
             return ResponseEntity.noContent().build();
         }
-
-        Trade worst = trades.stream()
-                .min((t1,t2) -> Double.compare(t1.calculatePnL(),t2.calculatePnL()))
-                .orElse(null);
-
         return ResponseEntity.ok(worst);
     }
 
-    //GET average pnl per trade
+    // GET average P&L per trade
     @GetMapping("/stats/avg-pnl")
-    public double getAveragePnl(){
-        List<Trade> trades = tradeRepository.findAll();
-        if(trades.isEmpty()) return 0;
-
-        return trades.stream()
-                .mapToDouble(Trade::calculatePnL)
-                .average()
-                .orElse(0);
+    public double getAveragePnl(Authentication authentication){
+        String username = authentication.getName();
+        return tradeService.getAveragePnl(username);
     }
 
-
-    //GET statistics by Strategy
+    // GET statistics by strategy
     @GetMapping("/stats/by-strategy")
-    public List<Map<String,Object>> getStatsByStrategy(){
-        List<Trade> allTrades = tradeRepository.findAll();
-
-        //group by strategy
-        Map<String,List<Trade>> byStrategy = new HashMap<>();
-        for(Trade trade : allTrades) {
-            byStrategy.computeIfAbsent(trade.getStrategy(),k -> new ArrayList<>())
-                    .add(trade);
-        }
-
-        //calculate stats for each strategy
-        List<Map<String , Object>> result = new ArrayList<>();
-        for(Map.Entry<String, List<Trade>> entry : byStrategy.entrySet()) {
-            String strategy = entry.getKey();
-            List<Trade> trades = entry.getValue();
-
-            double totalPnl = trades.stream()
-                    .mapToDouble(Trade::calculatePnL)
-                    .sum();
-
-            long wins = trades.stream()
-                    .filter(t -> t.calculatePnL() > 0)
-                    .count();
-
-            double winRate = (wins * 100.0) / trades.size();
-
-            Map<String, Object> stats = new HashMap<>();
-            stats.put("Strategy", strategy);
-            stats.put("totalTrades", trades.size());
-            stats.put("totalPnl", totalPnl);
-            stats.put("winRate", winRate);
-            stats.put("avgPnl", totalPnl / trades.size());
-
-            result.add(stats);
-        }
-
-        return result;
+    public List<Map<String,Object>> getStatsByStrategy(Authentication authentication){
+        String username = authentication.getName();
+        return tradeService.getStatsbyStrategy(username);
     }
 
-    //GET trades count by symbol
+    // GET trades count by symbol
     @GetMapping("/stats/by-symbol")
-    public List<Map<String,Object>> getTradesBySymbol() {
-        List<Trade> allTrades = tradeRepository.findAll();
-
-        Map<String, Long> countBySymbol = new HashMap<>();
-        for(Trade trade : allTrades){
-            countBySymbol.put(trade.getSymbol(),
-                    countBySymbol.getOrDefault(trade.getSymbol(), 0L) +1);
-
-        }
-
-        List<Map<String, Object>> result = new ArrayList<>();
-        for(Map.Entry<String, Long> entry : countBySymbol.entrySet()){
-            Map<String,Object> symbolData = new HashMap<>();
-            symbolData.put("symbol", entry.getKey());
-            symbolData.put("count", entry.getValue());
-            result.add(symbolData);
-        }
-
-        return result;
+    public List<Map<String,Object>> getTradesBySymbol(Authentication authentication) {
+        String username = authentication.getName();
+        return tradeService.getCountBySymbol(username);
     }
 
-
-    //GET win/loss breakdown
+    // GET win/loss breakdown
     @GetMapping("/stats/win-loss")
-    public Map<String,Object> getWinLossBreakdown(){
-        List<Trade> trades = tradeRepository.findAll();
-
-        long wins = trades.stream()
-                .filter(t -> t.calculatePnL() > 0)
-                .count();
-
-        long losses = trades.size()-wins;
-
-        double totalWinPnl = trades.stream()
-                .filter(t -> t.calculatePnL() > 0)
-                .mapToDouble(Trade::calculatePnL)
-                .sum();
-
-        double totalLossPnL = trades.stream()
-                .filter(t -> t.calculatePnL() <= 0)
-                .mapToDouble(Trade::calculatePnL)
-                .sum();
-
-        Map<String, Object> breakdown = new HashMap<>();
-        breakdown.put("totalTrades", trades.size());
-        breakdown.put("wins", wins);
-        breakdown.put("losses", losses);
-        breakdown.put("winRate", wins * 100.0 / trades.size());
-        breakdown.put("totalWinPnl", totalWinPnl);
-        breakdown.put("totalLossPnl", totalLossPnL);
-        breakdown.put("avgWin", wins > 0 ? totalWinPnl/wins:0);
-        breakdown.put("avgLoss", losses > 0 ? totalLossPnL/losses: 0);
-
-        return breakdown;
+    public Map<String,Object> getWinLossBreakdown(Authentication authentication){
+        String username = authentication.getName();
+        return tradeService.getWinLossBreakdown(username);
     }
 
+    //    FILTERING ENDPOINTS
 
-    //GET trades form specific date
+    // GET trades by strategy
+    @GetMapping("/strategy/{strategy}")
+    public List<Trade> getTradesByStrategy(@PathVariable String strategy, Authentication authentication) {
+        String username = authentication.getName();
+        return tradeService.getTradesByStrategy(username, strategy);
+    }
+
+    //  DATE BASED ENDPOINTS
+
+    // GET trades from specific date
     @GetMapping("/date/{date}")
-    public List<Trade> getTradesByDate(@PathVariable String date){
-        //format is yyyy-mm--dd
-        LocalDate localDate = LocalDate.parse(date);
-        LocalDateTime startOfDay = localDate.atStartOfDay();
-        LocalDateTime endOfDay = localDate.plusDays(1).atStartOfDay();
-
-        return tradeRepository.findByTradeDateBetween(startOfDay, endOfDay);
+    public List<Trade> getTradesByDate(@PathVariable String date, Authentication authentication){
+        String username = authentication.getName();
+        return tradeService.getTradesByDate(username, date);
     }
 
-    //GET trades form date range
+    // GET trades from date range
     @GetMapping("/date-range")
     public List<Trade> getTradesByDateRange(
             @RequestParam String start,
-            @RequestParam String end) {
-        //format is yyyy-mm-dd
-        LocalDateTime startDate = LocalDate.parse(start).atStartOfDay();
-        LocalDateTime endDate = LocalDate.parse(end).plusDays(1).atStartOfDay();
-
-        return tradeRepository.findByTradeDateBetween(startDate,endDate);
+            @RequestParam String end,
+            Authentication authentication) {
+        String username = authentication.getName();
+        return tradeService.getTradesByDateRange(username, start, end);
     }
 
-    //GET today's trades
+    // GET today's trades
     @GetMapping("/today")
-    public List<Trade> getTodayTrades(){
-        return tradeRepository.findTodayTrades();
+    public List<Trade> getTodayTrades(Authentication authentication){
+        String username = authentication.getName();
+        return tradeService.getTodayTrades(username);
     }
 
-    //GET this week's trades
+    // GET this week's trades
     @GetMapping("/this-week")
-    public List<Trade> getThisWeekTrades(){
-        LocalDateTime weekAgo = LocalDateTime.now().minusDays(7);
-        return tradeRepository.findByTradeDateAfter(weekAgo);
+    public List<Trade> getThisWeekTrades(Authentication authentication){
+        String username = authentication.getName();
+        return tradeService.getThisWeekTrades(username);
     }
 
-    //GET this month's trades
+    // GET this month's trades
     @GetMapping("/this-month")
-    public List<Trade> getThisMonthTrades() {
-        LocalDateTime monthAgo = LocalDateTime.now().minusMonths(1);
-        return tradeRepository.findByTradeDateAfter(monthAgo);
+    public List<Trade> getThisMonthTrades(Authentication authentication) {
+        String username = authentication.getName();
+        return tradeService.getThisMonthTrades(username);
     }
-
-
-
-
-
 }

@@ -1,5 +1,6 @@
 package com.shubham.journal_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -13,9 +14,6 @@ import java.time.LocalDateTime;
 @Table(name= "trades") //table name in mysql db
 public class Trade {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
     @Id //primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto increment
@@ -54,6 +52,12 @@ public class Trade {
 
     @Column(name = "updated_at")
     private LocalDateTime updateAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore //to not include user details in JASON response
+    private User user;
+
 
     //automatically set timestamps
     @PrePersist
@@ -105,6 +109,7 @@ public class Trade {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
 
 
 //    tradeDate = when trade actually happened
