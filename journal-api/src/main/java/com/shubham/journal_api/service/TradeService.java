@@ -6,10 +6,7 @@ import com.shubham.journal_api.model.User;
 import com.shubham.journal_api.repository.TradeRepository;
 import com.shubham.journal_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -166,6 +163,8 @@ public class TradeService {
                 .collect(Collectors.toList());
     }
 
+
+
     //Get trades by symbol
     public List<Trade> getTradesBySymbol(String username, String symbol) {
         List<Trade> userTrades = getUserTrades(username);
@@ -212,6 +211,53 @@ public class TradeService {
             result.add(stats);
         }
         return result;
+    }
+
+    //paginated getStatsByStrategy
+    public Page<Map<String, Object>> getStatsByStrategyPaginated(String username, int page,int size) {
+        List<Trade> allTrades = getUserTrades(username);
+
+        //Group by strategy
+        Map<String, List<Trade>> byStrategy = allTrades.stream()
+                .collect(Collectors.groupingBy(Trade::getStrategy));
+
+        //calculate stats for each strategy
+        List<Map<String,Object>> result = new ArrayList<>();
+
+        for(Map.Entry<String, List<Trade>> entry : byStrategy.entrySet()) {
+            String strategy = entry.getKey();
+            List<Trade> trades = entry.getValue();
+
+            double totalPnl = trades.stream()
+                    .mapToDouble(Trade::calculatePnL)
+                    .sum();
+
+            long wins = trades.stream()
+                    .filter(t -> t.calculatePnL() >0)
+                    .count();
+
+            double winRate = (wins * 100.0) / trades.size();
+
+            Map<String , Object> stats = new HashMap<>();
+            stats.put("strategy", strategy);
+            stats.put("totalTrades", trades.size());
+            stats.put("totalPnl", totalPnl);
+            stats.put("winRate", winRate);
+            stats.put("avgPnl", totalPnl / trades.size());
+
+            result.add(stats);
+
+        }
+
+        //Manual pagination (since we are working with list, not database query)
+        int start = page * size;
+        int end = Math.min(start+size, result.size());
+
+        List<Map<String, Object>> pageContent = result.subList(start,end);
+
+        //convert to page object
+        return new PageImpl<>(pageContent,PageRequest.of(page,size), result.size());
+
     }
 
     //count trades by symbol

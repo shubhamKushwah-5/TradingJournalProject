@@ -129,6 +129,16 @@ public class TradeController{
         return tradeService.getStatsbyStrategy(username);
     }
 
+    // GET statistics by strategy Paginated
+    @GetMapping("/stats/by-strategy/paginated")
+    public Page<Map<String,Object>> getStatsByStrategyPaginated (
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Authentication authentication) {
+        String username = authentication.getName();
+        return tradeService.getStatsByStrategyPaginated(username,page,size);
+    }
+
     // GET trades count by symbol
     @GetMapping("/stats/by-symbol")
     public List<Map<String,Object>> getTradesBySymbol(Authentication authentication) {
