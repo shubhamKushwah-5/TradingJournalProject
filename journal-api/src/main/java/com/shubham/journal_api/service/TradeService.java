@@ -6,6 +6,9 @@ import com.shubham.journal_api.model.User;
 import com.shubham.journal_api.repository.TradeRepository;
 import com.shubham.journal_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,6 +32,18 @@ public class TradeService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return user.getTrades();
+    }
+
+    // Pagination method
+    public Page<Trade> getUserTradesPaginated(String username, int page, int size) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() ->new RuntimeException("User not found"));
+
+        //Create pageable object(page number, page size)
+        Pageable pageable = PageRequest.of(page,size);
+
+        //Find trades by user with pagination
+        return tradeRepository.findByUser(user,pageable);
     }
 
     //Add trade for a specific user

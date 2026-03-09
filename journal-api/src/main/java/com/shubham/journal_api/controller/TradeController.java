@@ -4,6 +4,7 @@ import com.shubham.journal_api.model.Trade;
 import com.shubham.journal_api.service.TradeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,18 @@ public class TradeController{
         String username = authentication.getName();
         return tradeService.getUserTrades(username);
     }
+
+    //Paginated endpoint
+    @GetMapping("/paginated")
+    public Page<Trade> getTradesPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            Authentication authentication){
+
+        String username = authentication.getName();
+        return tradeService.getUserTradesPaginated(username,page,size);
+    }
+
 
     // GET single trade by ID
     @GetMapping("/{id}")
