@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -43,6 +44,22 @@ public class TradeService {
         Pageable pageable = PageRequest.of(page,size);
 
         //Find trades by user with pagination
+        return tradeRepository.findByUser(user,pageable);
+    }
+
+    //new pagination plus sorting
+    public Page<Trade> getUserTradesPaginated(String username, int page, int size, String sortBy, String direction) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        //Create sort object
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        //Create Pageable with sorting
+        Pageable pageable = PageRequest.of(page,size, sort);
+
         return tradeRepository.findByUser(user,pageable);
     }
 

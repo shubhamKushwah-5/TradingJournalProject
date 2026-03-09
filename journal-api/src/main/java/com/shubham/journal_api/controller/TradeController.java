@@ -34,10 +34,13 @@ public class TradeController{
     public Page<Trade> getTradesPaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
+            //implementing sort feature
+            @RequestParam(defaultValue = "tradeDate") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction,
             Authentication authentication){
 
         String username = authentication.getName();
-        return tradeService.getUserTradesPaginated(username,page,size);
+        return tradeService.getUserTradesPaginated(username,page,size,sortBy,direction);
     }
 
 
