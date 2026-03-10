@@ -8,7 +8,9 @@ import com.shubham.journal_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -16,6 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class TradeService {
+
+    @Autowired
+    FileUploadService fileUploadService;
 
     @Autowired
     private TradeRepository tradeRepository;
@@ -377,6 +382,38 @@ public class TradeService {
         return userTrades.stream()
                 .filter(t->t.getTradeDate().isAfter(monthAgo))
                 .collect(Collectors.toList());
+    }
+
+
+    //Add trade with screenshot
+    public Trade addTradeWithScreenshot(Trade trade, String username, MultipartFile screenshot) throws IOException{
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // upload screenshot if provided
+        if(screenshot != null && !screenshot.isEmpty()) {
+            String filename = fileUploadService.uploadFile(screenshot);
+            trade.setScreenshotPath(filename);
+        }
+
+        trade.setUser(user);
+        return tradeRepository.save(trade);
+    }
+
+    //update Screenshot
+    public Trade updateScreenshot(Long tradeId, String username, MultipartFile screenshot) throws IOException {
+        Trade trade = getTradeById(tradeId,username);
+
+        // Delete old screenshot if exists
+        if(trade.getScreenshotPath() != null) {
+            fileUploadService.deleteFile(trade.getScreenshotPath());
+        }
+
+        // Upload new screenshot
+        String filenmae = fileUploadService.uploadFile(screenshot);
+        trade.setScreenshotPath(filenmae);
+
+        return tradeRepository.save(trade);
     }
 
 }

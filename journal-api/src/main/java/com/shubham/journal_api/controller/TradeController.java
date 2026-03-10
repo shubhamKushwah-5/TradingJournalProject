@@ -1,15 +1,23 @@
 package com.shubham.journal_api.controller;
 
 import com.shubham.journal_api.model.Trade;
+import com.shubham.journal_api.service.FileUploadService;
 import com.shubham.journal_api.service.TradeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +27,12 @@ public class TradeController{
 
     @Autowired
     private TradeService tradeService;
+
+    @Autowired
+    private FileUploadService fileUploadService;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     //                 BASIC CRUD CONTROLLERS
 
@@ -201,4 +215,56 @@ public class TradeController{
         String username = authentication.getName();
         return tradeService.getThisMonthTrades(username);
     }
+
+    //Add trade with Screenshot
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<Trade> addTradeWithScreenshot(
+            @RequestParam("symbol") String symbol,
+            @RequestParam("type") String type,
+            @RequestParam("entryPrice") double entryPrice,
+            @RequestParam("exitPrice") double exitPrice,
+            @RequestParam("quantity") int quantity,
+            @RequestParam("strategy") String strategy,
+            @RequestParam(value = "screenshot", required = false)MultipartFile screenshot,
+            Authentication authentication) throws IOException {
+
+        Trade trade = new Trade(symbol,type,entryPrice,exitPrice,quantity,strategy);
+
+        String username = authentication.getName();
+        Trade saved = tradeService.addTradeWithScreenshot(trade,username,screenshot);
+
+        return new ResponseEntity<>(saved,HttpStatus.CREATED);
+    }
+
+    //upload screenshot to existing trade
+    @PostMapping("/{id}/screenshot")
+    public Trade uploadScreenshot(
+            @PathVariable Long id,
+            @RequestParam("screenshot") MultipartFile screenshot,
+            Authentication authentication) throws IOException {
+
+        String username = authentication.getName();
+        return tradeService.updateScreenshot(id,username, screenshot);
+    }
+
+    //Get screrenshot
+    @GetMapping("/{id}/screenshot")
+    public ResponseEntity<byte[]> getScreenshot(@PathVariable Long id, Authentication authentication) throws IOException {
+        String username = authentication.getName();
+        Trade trade = tradeService.getTradeById(id,username);
+
+        if(trade.getScreenshotPath() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Path filePath = Paths.get(uploadDir).resolve(trade.getScreenshotPath());
+        byte[] image = Files.readAllBytes(filePath);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(image);
+    }
+
+
+
 }

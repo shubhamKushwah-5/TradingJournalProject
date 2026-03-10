@@ -74,6 +74,9 @@ public class Trade {
         updateAt = LocalDateTime.now();
     }
 
+    @Column(name = "screenshot_path")
+    private String screenshotPath;  //stores file path
+
 
 
     //getter and setters
@@ -110,7 +113,8 @@ public class Trade {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
-
+    public String getScreenshotPath() {return screenshotPath;}
+    public void setScreenshotPath(String screenshotPath) { this.screenshotPath =  screenshotPath; }
 
 //    tradeDate = when trade actually happened
 //    createdAt = when record was created in DB
