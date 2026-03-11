@@ -1,6 +1,7 @@
 package com.shubham.journal_api.controller;
 
 import com.shubham.journal_api.model.Trade;
+import com.shubham.journal_api.service.CsvImportService;
 import com.shubham.journal_api.service.FileUploadService;
 import com.shubham.journal_api.service.TradeService;
 import jakarta.validation.Valid;
@@ -18,12 +19,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/trades")
 public class TradeController{
+
+    @Autowired
+    private CsvImportService csvImportService;
 
     @Autowired
     private TradeService tradeService;
@@ -263,6 +268,41 @@ public class TradeController{
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(image);
+    }
+
+    // Import trades from CSV
+    @PostMapping("/import/csv")
+    public ResponseEntity<Map<String, Object>> importCsv (
+            @RequestParam("file") MultipartFile file,
+            Authentication authentication) {
+
+        try {
+            String username = authentication.getName();
+            List<Trade> imported = csvImportService.importTradesFromCsv(file,username);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Trades imported successfully");
+            response.put("count", imported.size());
+            response.put("trades", imported);
+
+            return ResponseEntity.ok(response);
+        }  catch (Exception e) {
+            Map<String , Object> error = new HashMap<>();
+            error.put("error", "CSV import failed: " + e.getMessage());
+            return  ResponseEntity.badRequest().body(error);
+        }
+    }
+
+    // Export trades to CSV
+    @GetMapping("/export/csv")
+    public ResponseEntity<String> exportCsv(Authentication authentication) {
+        String username = authentication.getName();
+        String csv = tradeService.exportTradesToCsv(username);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename = trades.csv")
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(csv);
     }
 
 

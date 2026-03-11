@@ -416,4 +416,28 @@ public class TradeService {
         return tradeRepository.save(trade);
     }
 
+    //Export trades to CSV fromat
+    public String exportTradesToCsv(String username) {
+        List<Trade> trades = getUserTrades(username);
+
+        StringBuilder csv = new StringBuilder();
+
+        //Header
+        csv.append("symbol,type,entry_price,exit_price,quantity,strategy,trade_date,pnl\n");
+
+        //Rows
+        for(Trade trade : trades) {
+            csv.append(trade.getSymbol()).append(",");
+            csv.append(trade.getType()).append(",");
+            csv.append(trade.getEntryPrice()).append(",");
+            csv.append(trade.getExitPrice()).append(",");
+            csv.append(trade.getQuantity()).append(",");
+            csv.append(trade.getStrategy()).append(",");
+            csv.append(trade.getTradeDate() != null ? trade.getTradeDate(): "").append(",");
+            csv.append(trade.calculatePnL()).append("\n");
+        }
+
+        return csv.toString();
+    }
+
 }
