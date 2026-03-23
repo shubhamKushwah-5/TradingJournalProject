@@ -1,0 +1,1387 @@
+{
+  "info": {
+    "_postman_id": "918fa2f3-4fc1-408e-b8b9-80799207697c",
+    "name": "Trading Journal API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51925263",
+    "_collection_link": "https://go.postman.co/collection/51925263-918fa2f3-4fc1-408e-b8b9-80799207697c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register - Rahul",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"rahul\",\r\n  \"email\": \"rahul@test.com\",\r\n  \"password\": \"pass123\",\r\n  \"fullName\": \"Rahul Kumar\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register - Priya",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"priya\",\r\n  \"email\": \"priya@test.com\",\r\n  \"password\": \"pass123\",\r\n  \"fullName\": \"Priya Sharma\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register - Amit",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"username\": \"amit\",\r\n  \"email\": \"amit@test.com\",\r\n  \"password\": \"pass123\",\r\n  \"fullName\": \"Amit Singh\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login - Rahul",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Parse the JSON response\r",
+              "var jsonData = pm.response.json();\r",
+              "\r",
+              "// Save token to environment variable\r",
+              "pm.environment.set(\"rahul_token\", jsonData.token);\r",
+              "\r",
+              "// Print confirmation\r",
+              "console.log(\"Rahul's token saved!\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"rahul\",\r\n  \"password\": \"pass123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login - Priya",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "pm.environment.set(\"priya_token\", jsonData.token);\r",
+              "console.log(\"Priya's token saved!\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"priya\",\r\n  \"email\": \"priya@test.com\",\r\n  \"password\": \"pass123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login - Amit",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Parse the JSON response\r",
+              "var jsonData = pm.response.json();\r",
+              "\r",
+              "// Save token to environment variable\r",
+              "pm.environment.set(\"amit_token\", jsonData.token);\r",
+              "\r",
+              "// Print confirmation\r",
+              "console.log(\"Amits's token saved!\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"amit\",\r\n  \"password\": \"pass123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade  - RELIANCE (Rahul)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{rahul_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"RELIANCE\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 2500,\r\n  \"exitPrice\": 2550,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Intraday\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade  - TCS(Rahul)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{rahul_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"TCS\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 3500,\r\n  \"exitPrice\": 3450,\r\n  \"quantity\": 5,\r\n  \"strategy\": \"Intraday\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade  - INFY(Rahul)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{rahul_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"INFY\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 1500,\r\n  \"exitPrice\": 1550,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Intraday\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade  - HDFC (Rahul)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{rahul_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"HDFC\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 1600,\r\n  \"exitPrice\": 1580,\r\n  \"quantity\": 8,\r\n  \"strategy\": \"Intraday\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade  - WIPRO (Rahul)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{rahul_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"WIPRO\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 400,\r\n  \"exitPrice\": 420,\r\n  \"quantity\": 20,\r\n  \"strategy\": \"Intraday\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - RELIANCE(Priya)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{priya_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"RELIANCE\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 2500,\r\n  \"exitPrice\": 2650,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Swing\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - TCS(Priya)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{priya_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"TCS\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 3500,\r\n  \"exitPrice\": 3700,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Swing\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - INFY(Priya)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{priya_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"INFY\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 1500,\r\n  \"exitPrice\": 1480,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Swing\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - NIFTY(Priya)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{priya_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"NIFTY\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 21000,\r\n  \"exitPrice\": 21200,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Swing\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - RELIANCE (Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"RELIANCE\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 2500,\r\n  \"exitPrice\": 2505,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Scalping\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - RELIANCE (Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"RELIANCE\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 2505,\r\n  \"exitPrice\": 2510,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Scalping\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - TCS(Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"TCS\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 3500,\r\n  \"exitPrice\": 3495,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Scalping\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - INFY (Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"INFY\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 1500,\r\n  \"exitPrice\": 1505,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Scalping\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - HDFC (Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"HDFC\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 1600,\r\n  \"exitPrice\": 1605,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Scalping\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade - WIPRO(Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"WIPRO\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 400,\r\n  \"exitPrice\": 398,\r\n  \"quantity\": 10,\r\n  \"strategy\": \"Scalping\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/trades",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "add 30 random trade to amit",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"symbol\": \"TCS_{{$randomInt}}\",\r\n  \"type\": \"BUY\",\r\n  \"entryPrice\": 3500,\r\n  \"exitPrice\": {{$randomInt}},\r\n  \"quantity\": {{$randomInt}},\r\n  \"strategy\": \"Intraday\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Trades without Pagination (Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/trades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Trade with screenshot (Amit)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "screenshot",
+              "type": "file",
+              "uuid": "bf03b486-59ef-4b29-a530-c52441324afb",
+              "src": "/C:/WORK/java project/DAILY/uploads/pexels-sagui-andrea-618833.jpg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/49/screenshot",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "49",
+            "screenshot"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CSV TEST",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "uuid": "84037f5d-fcbd-428d-9560-d1900acbf6c8",
+              "src": "/C:/WORK/java project/DAILY/Day 23/trades.csv"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/export/csv",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "export",
+            "csv"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Trades with  Pagination (Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/trades/paginated?sortBy=symbol&direction=asc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "paginated"
+          ],
+          "query": [
+            {
+              "key": "sortBy",
+              "value": "symbol"
+            },
+            {
+              "key": "direction",
+              "value": "asc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Trade by id (Amit )",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/trades/86",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "86"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Trade (Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 86,\r\n    \"symbol\": \"TCS\",\r\n    \"type\": \"BUY\",\r\n    \"entryPrice\": 3580.0,\r\n    \"exitPrice\": 3450.0,\r\n    \"quantity\": 5,\r\n    \"strategy\": \"Swing\",\r\n    \"tradeDate\": \"2025-02-20T11:00:00\",\r\n    \"createdAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"updateAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"screenshotPath\": null\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/86",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "86"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Trade(Amit)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/66",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "66"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Pagination + Sorting Trade (Amit)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 86,\r\n    \"symbol\": \"TCS\",\r\n    \"type\": \"BUY\",\r\n    \"entryPrice\": 3580.0,\r\n    \"exitPrice\": 3450.0,\r\n    \"quantity\": 5,\r\n    \"strategy\": \"Swing\",\r\n    \"tradeDate\": \"2025-02-20T11:00:00\",\r\n    \"createdAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"updateAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"screenshotPath\": null\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/paginated?sortBy=symbol&direction=asc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "paginated"
+          ],
+          "query": [
+            {
+              "key": "sortBy",
+              "value": "symbol"
+            },
+            {
+              "key": "direction",
+              "value": "asc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Total Pnl (Amit)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 86,\r\n    \"symbol\": \"TCS\",\r\n    \"type\": \"BUY\",\r\n    \"entryPrice\": 3580.0,\r\n    \"exitPrice\": 3450.0,\r\n    \"quantity\": 5,\r\n    \"strategy\": \"Swing\",\r\n    \"tradeDate\": \"2025-02-20T11:00:00\",\r\n    \"createdAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"updateAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"screenshotPath\": null\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/stats/total-pnl",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "stats",
+            "total-pnl"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Win Rate (Amit)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 86,\r\n    \"symbol\": \"TCS\",\r\n    \"type\": \"BUY\",\r\n    \"entryPrice\": 3580.0,\r\n    \"exitPrice\": 3450.0,\r\n    \"quantity\": 5,\r\n    \"strategy\": \"Swing\",\r\n    \"tradeDate\": \"2025-02-20T11:00:00\",\r\n    \"createdAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"updateAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"screenshotPath\": null\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/stats/winrate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "stats",
+            "winrate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Best Trade (Amit)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 86,\r\n    \"symbol\": \"TCS\",\r\n    \"type\": \"BUY\",\r\n    \"entryPrice\": 3580.0,\r\n    \"exitPrice\": 3450.0,\r\n    \"quantity\": 5,\r\n    \"strategy\": \"Swing\",\r\n    \"tradeDate\": \"2025-02-20T11:00:00\",\r\n    \"createdAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"updateAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"screenshotPath\": null\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/stats/best-trade",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "stats",
+            "best-trade"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Worst Trade (Amit)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 86,\r\n    \"symbol\": \"TCS\",\r\n    \"type\": \"BUY\",\r\n    \"entryPrice\": 3580.0,\r\n    \"exitPrice\": 3450.0,\r\n    \"quantity\": 5,\r\n    \"strategy\": \"Swing\",\r\n    \"tradeDate\": \"2025-02-20T11:00:00\",\r\n    \"createdAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"updateAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"screenshotPath\": null\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/stats/worst-trade",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "stats",
+            "worst-trade"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Without authorization",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 86,\r\n    \"symbol\": \"TCS\",\r\n    \"type\": \"BUY\",\r\n    \"entryPrice\": 3580.0,\r\n    \"exitPrice\": 3450.0,\r\n    \"quantity\": 5,\r\n    \"strategy\": \"Swing\",\r\n    \"tradeDate\": \"2025-02-20T11:00:00\",\r\n    \"createdAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"updateAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"screenshotPath\": null\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Accessing other user Trade",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{amit_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 86,\r\n    \"symbol\": \"TCS\",\r\n    \"type\": \"BUY\",\r\n    \"entryPrice\": 3580.0,\r\n    \"exitPrice\": 3450.0,\r\n    \"quantity\": 5,\r\n    \"strategy\": \"Swing\",\r\n    \"tradeDate\": \"2025-02-20T11:00:00\",\r\n    \"createdAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"updateAt\": \"2026-03-11T11:44:06.095304\",\r\n    \"screenshotPath\": null\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/trades/46",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "trades",
+            "46"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

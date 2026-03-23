@@ -1,3 +1,9 @@
+# Trading Journal API
+
+> 🚀 **Live Demo**: [Coming Soon - Deploying March 22, 2025]
+
+JWT-authenticated REST API for tracking trading journal with statistics.
+
 # Trading Journal API Documentation
 
 ## Base URL
