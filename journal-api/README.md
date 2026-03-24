@@ -1,13 +1,19 @@
 # Trading Journal API
 
-> 🚀 **Live Demo**: [Coming Soon - Deploying March 22, 2025]
-
+> **Live Production API**: https://trading-journal-project.onrender.com
 JWT-authenticated REST API for tracking trading journal with statistics.
+
+## 🏗️ Architecture & Tech Stack
+* **Backend:** Java 21, Spring Boot 3, Spring Data JPA, Hibernate
+* **Security:** Spring Security, JWT (Stateless Authentication)
+* **Database:** PostgreSQL (Production) / MySQL (Local)
+* **Infrastructure:** Docker Containerization, CI/CD via Render
 
 # Trading Journal API Documentation
 
-## Base URL
-http://localhost:8080
+## 🔌 API Environments
+* **Production Base URL:** `https://trading-journal-api-xxxx.onrender.com
+* **Local Base URL:** `http://localhost:8080
 
 ## Authentication
 All endpoints (except /api/auth/*) require JWT token in header:
@@ -121,4 +127,7 @@ GET /api/trades/this-month - Last 30 days
 - Each user can only access their own trades
 - Passwords are hashed with BCrypt
 - Stateless authentication (no sessions)
-```
+- **Strict User Isolation:**
+    Users can only access, modify, or delete their own trades via security context extraction.
+- **Database Agnosticism:**
+    Developed with MySQL and deployed to PostgreSQL with zero business-logic changes, proving a strictly decoupled ORM layer.
