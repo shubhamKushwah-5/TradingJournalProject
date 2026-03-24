@@ -139,7 +139,7 @@ GET /api/trades/this-month - Last 30 days
 ### 1. Register User
 ![Register User](./Screenshots/Register%20User.png)
 
-### 2. Secure Authentication (JWT)
+### 2. Login User - Secure Authentication (JWT)
 ![Login User](./Screenshots/Login%20User.png)
 
 ### 3. Logging a Trade (Protected Route)
