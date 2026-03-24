@@ -30,6 +30,11 @@ public interface TradeRepository extends JpaRepository<Trade,Long> {
     //find trades by user with pagination
     Page<Trade> findByUser(User user, Pageable pageable);
 
-    @Query("SELECT t FROM Trade t WHERE DATE(t.tradeDate ) = CURRENT_DATE")
+    //original code
+    //@Query("SELECT t FROM Trade t WHERE DATE(t.tradeDate ) = CURRENT_DATE")
+    //List<Trade> findTodayTrades();
+
+    //new logic (works on mysql and postgreSql)
+    @Query("SELECT t FROM Trade t WHERE t.tradeDate = CURRENT_DATE")
     List<Trade> findTodayTrades();
 }
