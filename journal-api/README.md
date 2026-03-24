@@ -130,4 +130,17 @@ GET /api/trades/this-month - Last 30 days
 - **Strict User Isolation:**
     Users can only access, modify, or delete their own trades via security context extraction.
 - **Database Agnosticism:**
-    Developed with MySQL and deployed to PostgreSQL with zero business-logic changes, proving a strictly decoupled ORM layer.
+    Developed with MySQL and deployed to PostgreSQL with zero business-logic changes, proving 
+    a strictly decoupled ORM layer.
+
+## 📸 Production Preview
+
+
+### 1. Register User
+![Register User](./Screenshots/Register%20User.png)
+
+### 2. Secure Authentication (JWT)
+![Login User](./Screenshots/Login%20User.png)
+
+### 3. Logging a Trade (Protected Route)
+![Cretae Trade](./Screenshots/Create%20Trade.png)
