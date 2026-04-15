@@ -1,7 +1,7 @@
 # Trading Journal API
 
 > **Live Production API**: https://trading-journal-project.onrender.com
-JWT-authenticated REST API for tracking trading journal with statistics.
+REST API for tracking trading journal with JWT authentication and comprehensive statistics.
 
 ## 🏗️ Architecture & Tech Stack
 * **Backend:** Java 21, Spring Boot 3, Spring Data JPA, Hibernate
@@ -9,11 +9,22 @@ JWT-authenticated REST API for tracking trading journal with statistics.
 * **Database:** PostgreSQL (Production) / MySQL (Local)
 * **Infrastructure:** Docker Containerization, CI/CD via Render
 
-# Trading Journal API Documentation
 
-## 🔌 API Environments
-* **Production Base URL:** `https://trading-journal-api-xxxx.onrender.com
+## 📱 Live Features
+
+Try it out:
+- **Register**: `POST /api/auth/register`
+- **Login**: `POST /api/auth/login`
+- **View API**: https://trading-journal-project.onrender.com
+
+## 🔗 Links
+* **Production Base URL:** `https://trading-journal-project.onrender.com
 * **Local Base URL:** `http://localhost:8080
+*  **GitHub** https://github.com/shubhamKushwah-5/TradingJournalProject.git
+
+
+
+# Trading Journal API Documentation
 
 ## Authentication
 All endpoints (except /api/auth/*) require JWT token in header:
