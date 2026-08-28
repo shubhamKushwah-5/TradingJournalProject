@@ -24,7 +24,7 @@ A production-grade, multi-tenant RESTful backend designed for traders to securel
 * **Advanced Analytics Engine:** Uses Java Streams (`Collectors.groupingBy`, custom comparators, mapping pipelines) to calculate real-time P&L, win rates, strategy-based performance metrics, and win/loss breakdowns in memory.
 * **Bulk Data Processing & Export:** Integrated **Apache Commons CSV** parser to seamlessly ingest bulk CSV records into JPA entities and dynamically stream text/csv export reports.
 * **Secure Media Management:** Implements unique UUID filename generation and automatic directory routing via `FileUploadService` to manage trade screenshot attachments securely.
-* **Database Agnosticism:** Developed locally using MySQL and deployed to production on PostgreSQL via Hibernate ORM with zero business-logic changes.
+* **Database Agnosticism:** * **Database Agnosticism:** Configured with Hibernate ORM, allowing seamless integration and portability across relational database management systems like MySQL.
 
 ---
 
@@ -98,13 +98,13 @@ A production-grade, multi-tenant RESTful backend designed for traders to securel
 ## 📸 Interface Previews
 
 ### 1. Secure Registration
-![Register User](./Screenshots/Register%20User.png)
+![Register User](./journal-api/Screenshots/Register%20User.png)
 
 ### 2. JWT Generation (Login)
-![Login User](./Screenshots/Login%20User.png)
+![Login User](./journal-api/Screenshots/Login%20User.png)
 
 ### 3. Protected Trade Logging
-![Create Trade](./Screenshots/Create%20Trade.png)
+![Create Trade](./journal-api/Screenshots/Create%20Trade.png)
 
 ---
 
